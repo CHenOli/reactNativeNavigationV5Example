@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -13,6 +14,8 @@ import {
 } from 'react-native';
 
 const SplashPage = ({ navigation }) => {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light-content" />
@@ -28,8 +31,10 @@ const SplashPage = ({ navigation }) => {
       <Animatable.View
         animation="fadeInUpBig"
         duration={1500}
-        style={styles.footer}>
-        <Text style={styles.title}>Stay connected with everyone!</Text>
+        style={[styles.footer, { backgroundColor: colors.background }]}>
+        <Text style={[styles.title, { color: colors.text }]}>
+          Stay connected with everyone!
+        </Text>
         <Text style={styles.text}>Sign In</Text>
         <View style={styles.button}>
           <TouchableOpacity

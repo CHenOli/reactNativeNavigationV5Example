@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
@@ -27,6 +28,8 @@ const SignInPage = ({ navigation }) => {
     isValidUser: true,
     isValidPassword: true,
   });
+
+  const { colors } = useTheme();
 
   const { signIn } = useContext(AuthContext);
 
@@ -117,13 +120,17 @@ const SignInPage = ({ navigation }) => {
       <View style={styles.header}>
         <Text style={styles.textHeader}>Welcome!</Text>
       </View>
-      <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-        <Text style={styles.textFooter}>Username</Text>
+      <Animatable.View
+        animation="fadeInUpBig"
+        style={[styles.footer, { backgroundColor: colors.background }]}>
+        <Text style={[styles.textFooter, { color: colors.text }]}>
+          Username
+        </Text>
         <View style={styles.action}>
-          <FontAwesome name="user-o" color="#05375a" size={20} />
+          <FontAwesome name="user-o" color={colors.text} size={20} />
           <TextInput
             placeholder="your username"
-            style={styles.textInput}
+            style={[styles.textInput, { color: colors.text }]}
             autoCapitalize="none"
             onChangeText={(text) => {
               handleUsernameInputChange(text);
@@ -145,13 +152,16 @@ const SignInPage = ({ navigation }) => {
             </Text>
           </Animatable.View>
         )}
-        <Text style={(styles.textFooter, styles.password)}>Password</Text>
+        <Text
+          style={[styles.textFooter, styles.password, { color: colors.text }]}>
+          Password
+        </Text>
         <View style={styles.action}>
-          <Feather name="lock" color="#05375a" size={20} />
+          <Feather name="lock" color={colors.text} size={20} />
           <TextInput
             secureTextEntry={data.secureTextEntry}
             placeholder="your password"
-            style={styles.textInput}
+            style={[styles.textInput, { color: colors.text }]}
             autoCapitalize="none"
             onChangeText={(text) => {
               handlePasswordInputChange(text);
@@ -159,9 +169,9 @@ const SignInPage = ({ navigation }) => {
           />
           <TouchableOpacity onPress={togglePasswordVisible}>
             {data.secureTextEntry ? (
-              <Feather name="eye-off" color="grey" size={20} />
+              <Feather name="eye-off" color={colors.text} size={20} />
             ) : (
-              <Feather name="eye" color="grey" size={20} />
+              <Feather name="eye" color={colors.text} size={20} />
             )}
           </TouchableOpacity>
         </View>

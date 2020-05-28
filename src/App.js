@@ -1,19 +1,30 @@
 import 'react-native-gesture-handler';
 
-import AuthRoutes from './routes/Auth';
-import { View } from 'react-native-animatable';
+import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
-import React, { useEffect, useMemo, useReducer } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { View } from 'react-native-animatable';
 import AsyncStorage from '@react-native-community/async-storage';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native';
+
+import {
+  Provider as PaperProvider,
+  DarkTheme as PaperDarkTheme,
+  DefaultTheme as PaperDefaultTheme,
+} from 'react-native-paper';
+
+import AuthRoutes from './routes/Auth';
 import DrawerContent from './routes/Content';
-import { AuthContext } from './components/AuthContext';
 import SupportPage from './pages/SupportPage';
+import MainTabScreen from './pages/MainTabPage';
 import SettingsPage from './pages/SettingsPage';
 import BookmarksPage from './pages/BookmarksPage';
-import MainTabScreen from './pages/MainTabPage';
+import { AuthContext } from './components/AuthContext';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,6 +34,32 @@ const App = () => {
     username: null,
     userToken: null,
   };
+
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  const CustomDefaultTheme = {
+    ...DefaultTheme,
+    ...PaperDefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      ...PaperDefaultTheme.colors,
+      background: '#ffffff',
+      text: '#333333',
+    },
+  };
+
+  const CustomDarkTheme = {
+    ...DarkTheme,
+    ...PaperDarkTheme,
+    colors: {
+      ...DarkTheme.colors,
+      ...PaperDarkTheme.colors,
+      background: '#333333',
+      text: '#ffffff',
+    },
+  };
+
+  const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
 
   const loginReducer = (previousState, action) => {
     switch (action.type) {
@@ -34,7 +71,6 @@ const App = () => {
           isLoading: false,
         };
       case 'SIGNOUT':
-        console.log('caiu logout');
         return {
           ...previousState,
           username: null,
@@ -95,8 +131,11 @@ const App = () => {
         }
         dispatch({ type: 'SIGNOUT' });
       },
+      toggleTheme: () => {
+        setIsDarkTheme(!isDarkTheme);
+      },
     }),
-    [],
+    [isDarkTheme],
   );
 
   if (loginState.isLoading) {
@@ -108,21 +147,23 @@ const App = () => {
   }
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        {loginState.userToken !== null ? (
-          <Drawer.Navigator
-            drawerContent={(props) => <DrawerContent {...props} />}>
-            <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
-            <Drawer.Screen name="Support" component={SupportPage} />
-            <Drawer.Screen name="Settings" component={SettingsPage} />
-            <Drawer.Screen name="Bookmarks" component={BookmarksPage} />
-          </Drawer.Navigator>
-        ) : (
-          <AuthRoutes />
-        )}
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <PaperProvider theme={theme}>
+      <AuthContext.Provider value={authContext}>
+        <NavigationContainer theme={theme}>
+          {loginState.userToken !== null ? (
+            <Drawer.Navigator
+              drawerContent={(props) => <DrawerContent {...props} />}>
+              <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
+              <Drawer.Screen name="Support" component={SupportPage} />
+              <Drawer.Screen name="Settings" component={SettingsPage} />
+              <Drawer.Screen name="Bookmarks" component={BookmarksPage} />
+            </Drawer.Navigator>
+          ) : (
+            <AuthRoutes />
+          )}
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </PaperProvider>
   );
 };
 

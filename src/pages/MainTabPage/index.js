@@ -82,7 +82,7 @@ const HomeStackScreen = ({ navigation }) => (
           <Icon.Button
             name="ios-menu"
             size={25}
-            backgroundColor="#00000000"
+            backgroundColor="#009387"
             onPress={() => navigation.openDrawer()}
           />
         ),
@@ -110,7 +110,7 @@ const DetailsStackScreen = ({ navigation }) => (
           <Icon.Button
             name="ios-menu"
             size={25}
-            backgroundColor="#00000000"
+            backgroundColor="#1f65ff"
             onPress={() => navigation.openDrawer()}
           />
         ),
