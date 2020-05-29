@@ -1,8 +1,6 @@
 import 'react-native-gesture-handler';
 
 import React, { useEffect, useMemo, useReducer, useState } from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
-import { View } from 'react-native-animatable';
 import AsyncStorage from '@react-native-community/async-storage';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -138,14 +136,6 @@ const App = () => {
     [isDarkTheme],
   );
 
-  if (loginState.isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
   return (
     <PaperProvider theme={theme}>
       <AuthContext.Provider value={authContext}>
@@ -168,11 +158,3 @@ const App = () => {
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
